@@ -1,0 +1,74 @@
+name: flutter_wallet_validator
+description: A comprehensive blockchain wallet address validator
+version: 0.1.0
+homepage: https://github.com/bchainhub/flutter_wallet_validator
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  path: ^1.9.0
+  path_provider: ^2.1.2
+  url_launcher: ^6.2.5
+  http: ^1.1.0
+  crypto: ^3.0.3
+  convert: ^3.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  # This section identifies this Flutter project as a plugin project.
+  # The 'pluginClass' specifies the class (in Java, Kotlin, Swift, Objective-C, etc.)
+  # which should be registered in the plugin registry.
+  plugin:
+    platforms:
+      android:
+        package: com.example.flutter_wallet_validator
+        pluginClass: FlutterWalletValidatorPlugin
+      ios:
+        pluginClass: FlutterWalletValidatorPlugin
+      linux:
+        pluginClass: FlutterWalletValidatorPlugin
+      macos:
+        pluginClass: FlutterWalletValidatorPlugin
+      windows:
+        pluginClass: FlutterWalletValidatorPlugin
+      web:
+        pluginClass: FlutterWalletValidatorWeb
+        fileName: flutter_wallet_validator_web.dart
+      wasm:
+        pluginClass: FlutterWalletValidatorWasm
+        fileName: flutter_wallet_validator_wasm.dart
+
+# Additional information about this package
+repository: https://github.com/bchainhub/flutter_wallet_validator
+issue_tracker: https://github.com/bchainhub/flutter_wallet_validator/issues
+documentation: https://github.com/bchainhub/flutter_wallet_validator#readme
+
+# Keywords related to the package
+topics:
+  - blockchain
+  - wallet
+  - address
+  - validator
+  - crypto
+
+# Funding links
+funding:
+  - https://github.com/sponsors/bchainhub
+  - https://blockindex.net/address/cb7147879011ea207df5b35a24ca6f0859dcfb145999
+
+# Platform support
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:

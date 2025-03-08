@@ -1,0 +1,48 @@
+name: Publish to pub.dev
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Verify Formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze Project
+        run: flutter analyze
+
+      - name: Run Tests
+        run: flutter test
+
+      - name: Setup Pub Credentials
+        run: |
+          mkdir -p $XDG_CONFIG_HOME/dart
+          echo '${{ secrets.PUB_CREDENTIALS }}' > $XDG_CONFIG_HOME/dart/pub-credentials.json
+
+      - name: Check Publish Warnings
+        run: flutter pub publish --dry-run
+
+      - name: Publish Package
+        run: flutter pub publish -f
