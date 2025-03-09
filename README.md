@@ -3,7 +3,7 @@
 [![pub package](https://img.shields.io/pub/v/flutter_wallet_validator.svg)](https://pub.dev/packages/flutter_wallet_validator)
 [![License: CORE](https://img.shields.io/badge/License-CORE-yellow.svg)](LICENSE)
 [![Flutter Platform](https://img.shields.io/badge/Flutter-Platform-blue.svg)](https://flutter.dev)
-[![Dart SDK Version](https://img.shields.io/badge/Dart-SDK%20%3E%3D%203.3.0-blue.svg)](https://dart.dev)
+[![Dart SDK Version](https://img.shields.io/badge/Dart-SDK%20%3E%3D%203.5.0-blue.svg)](https://dart.dev)
 
 A comprehensive Flutter library for validating blockchain wallet addresses across multiple networks.
 
@@ -125,8 +125,8 @@ class WalletAddressValidator extends StatelessWidget {
 
 ## Environment
 
-- 🎯 **Dart SDK**: >=3.3.0 <4.0.0
-- 💙 **Flutter**: >=3.19.0
+- 🎯 **Dart SDK**: >=3.5.0 <4.0.0
+- 💙 **Flutter**: >=3.29.1
 - 📱 **Platforms**: All Flutter supported platforms
 
 ## Security

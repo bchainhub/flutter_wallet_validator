@@ -1,10 +1,11 @@
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
+import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'models/network_info.dart';
 import 'models/validation_options.dart';
 import 'utils/patterns.dart';
 import 'utils/base58_check.dart';
+import 'package:pointycastle/digests/keccak.dart';
 
 /// Validates a blockchain wallet address and returns information about the network it belongs to
 NetworkInfo validateWalletAddress(
@@ -117,11 +118,13 @@ NetworkInfo validateWalletAddress(
   // Handle EVM-like addresses first
   if (address.toLowerCase().startsWith('0x') &&
       _enabledNetwork(['evm', 'eth', 'base', 'pol'], allowedNetworks)) {
+    _enabledNetwork(['evm', 'eth', 'base', 'pol'], allowedNetworks);
+
     if (!Patterns.evm.hasMatch(address)) {
       return const NetworkInfo(
         network: 'evm',
         isValid: false,
-        description: 'Invalid EVM address format',
+        description: 'Invalid address format',
       );
     }
 
@@ -143,6 +146,7 @@ NetworkInfo validateWalletAddress(
   if (_enabledNetwork(['ican', 'xcb', 'xce', 'xab'], allowedNetworks) &&
       Patterns.ican.hasMatch(address)) {
     final isTestnet = address.startsWith('ab');
+    final isEnterprise = address.startsWith('ce');
     if (isTestnet && !options.testnet) {
       return const NetworkInfo(
         network: 'xab',
@@ -167,6 +171,7 @@ NetworkInfo validateWalletAddress(
                     ? 'Devin'
                     : null,
         'isTestnet': isTestnet,
+        'isEnterprise': isEnterprise,
         'printFormat': _formatICANAddress(address),
         'electronicFormat': address.toUpperCase(),
       },
@@ -529,12 +534,14 @@ NetworkInfo validateWalletAddress(
 
 NetworkInfo? _validateOptions(ValidationOptions options) {
   // Validate network option
-  if (options.network != null && options.network!.isNotEmpty) {
-    return const NetworkInfo(
-      network: null,
-      isValid: false,
-      description: 'Invalid options: network array must contain only strings',
-    );
+  if (options.network != null) {
+    for (final _ in options.network!) {
+      return const NetworkInfo(
+        network: null,
+        isValid: false,
+        description: 'Invalid options: network array must contain only strings',
+      );
+    }
   }
 
   return null;
@@ -551,14 +558,17 @@ bool _validateEVMChecksum(String address, bool forceValidation) {
     return true;
   }
 
-  final stripAddress = address.substring(2);
-  final addressBytes = utf8.encode(stripAddress.toLowerCase());
-  final hashBytes = sha256.convert(addressBytes).bytes;
+  final stripAddress = address.substring(2).toLowerCase();
+  final addressBytes = utf8.encode(stripAddress);
+
+  // Use Keccak-256 for EVM address checksum
+  final keccak = KeccakDigest(256);
+  final hashBytes = keccak.process(Uint8List.fromList(addressBytes));
   final addressHash = hex.encode(hashBytes);
 
   for (var i = 0; i < 40; i++) {
     final hashChar = int.parse(addressHash[i], radix: 16);
-    final addressChar = stripAddress[i];
+    final addressChar = address[i + 2]; // +2 to skip '0x' prefix
     if ((hashChar > 7 && addressChar.toUpperCase() != addressChar) ||
         (hashChar <= 7 && addressChar.toLowerCase() != addressChar)) {
       return false;
@@ -590,11 +600,15 @@ bool _validateICANChecksum(String address) {
   return int.parse(remainder) % 97 == 1;
 }
 
-bool _enabledNetwork(List<String> networks, List<String> allowedNetworks) {
-  if (allowedNetworks.isEmpty) {
+bool _enabledNetwork(List<String> networks, List<String>? allowedNetworks) {
+  if (allowedNetworks == null || allowedNetworks.isEmpty) {
     return true;
   }
-  return networks.any((network) => allowedNetworks.contains(network));
+
+  // Check if any of the networks are in the allowed list
+  final isEnabled =
+      networks.any((network) => allowedNetworks.contains(network));
+  return isEnabled;
 }
 
 String _formatICANAddress(String address) {

@@ -25,7 +25,7 @@ void main() {
 
       test('invalidates incorrect checksum EVM address', () {
         final result = validateWalletAddress(
-          '0x5AAeb6053F3E94C9b9A09f33669435E7Ef1BeAed',
+          '0x5AAeb6053F3E94C9b9A09f33669435E7Ef1BeAeD',
         );
         expect(result.network, equals('evm'));
         expect(result.isValid, isFalse);
@@ -229,16 +229,32 @@ void main() {
         expect(result.network, equals('xcb'));
         expect(result.isValid, isTrue);
         expect(result.metadata?['isTestnet'], isFalse);
+        expect(result.metadata?['electronicFormat'],
+            'CB7147879011EA207DF5B35A24CA6F0859DCFB145999');
       });
 
       test('validates testnet ICAN address', () {
         final result = validateWalletAddress(
-          'ab7147879011ea207df5b35a24ca6f0859dcfb145999',
+          'ab792215c43fc213c02182c8389f2bc32408e2c50922',
           options: const ValidationOptions(testnet: true),
         );
         expect(result.network, equals('xab'));
         expect(result.isValid, isTrue);
         expect(result.metadata?['isTestnet'], isTrue);
+        expect(result.metadata?['electronicFormat'],
+            'AB792215C43FC213C02182C8389F2BC32408E2C50922');
+      });
+
+      test('validates enterprise ICAN address', () {
+        final result = validateWalletAddress(
+          'ce450000000000000000000000000000000000000000',
+        );
+        expect(result.network, equals('xce'));
+        expect(result.isValid, isTrue);
+        expect(result.metadata?['isEnterprise'], isTrue);
+        expect(result.metadata?['codename'], 'Koliba');
+        expect(result.metadata?['electronicFormat'],
+            'CE450000000000000000000000000000000000000000');
       });
     });
 

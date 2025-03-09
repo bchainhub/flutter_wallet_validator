@@ -36,6 +36,6 @@ Initial release of the Flutter Wallet Validator package.
 
 ### Technical Requirements
 
-- Dart SDK: >=3.3.0 <4.0.0
-- Flutter: >=3.19.0
+- Dart SDK: >=3.5.0 <4.0.0
+- Flutter: >=3.29.1
 - Platforms: Android, iOS, Web, macOS, Windows, Linux, WASM
