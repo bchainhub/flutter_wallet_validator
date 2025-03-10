@@ -11,7 +11,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
 
     steps:
       - name: Checkout
@@ -38,8 +38,8 @@ jobs:
 
       - name: Setup Pub Credentials
         run: |
-          mkdir -p $XDG_CONFIG_HOME/dart
-          echo '${{ secrets.PUB_CREDENTIALS }}' > $XDG_CONFIG_HOME/dart/pub-credentials.json
+          mkdir -p $HOME/.config/dart
+          echo '${{ secrets.PUB_CREDENTIALS_JSON }}' | jq '.' > $HOME/.config/dart/pub-credentials.json
 
       - name: Check Publish Warnings
         run: flutter pub publish --dry-run
