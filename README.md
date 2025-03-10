@@ -38,7 +38,7 @@ A comprehensive Flutter library for validating blockchain wallet addresses acros
 
 ```yaml
 dependencies:
-  flutter_wallet_validator: ^0.1.0
+  flutter_wallet_validator: ^0.1.2
 ```
 
 Run:

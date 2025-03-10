@@ -1,3 +1,7 @@
+## 0.1.2
+
+- Changed the package description
+
 ## 0.1.1
 
 - Better description

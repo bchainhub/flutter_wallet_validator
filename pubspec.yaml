@@ -1,6 +1,6 @@
 name: flutter_wallet_validator
-description: A comprehensive blockchain wallet address validator supporting multiple networks including CORE, EVM, Bitcoin, Solana, Cardano, and more. Validates address formats, checksums, and network-specific rules.
-version: 0.1.1
+description: A blockchain wallet address validator for multiple networks (CORE, EVM, Bitcoin, Solana, Cardano). Validates formats and checksums.
+version: 0.1.2
 homepage: https://github.com/bchainhub/flutter_wallet_validator
 repository: https://github.com/bchainhub/flutter_wallet_validator
 documentation: https://github.com/bchainhub/flutter_wallet_validator#readme
