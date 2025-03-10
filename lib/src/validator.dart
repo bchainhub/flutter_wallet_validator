@@ -535,13 +535,24 @@ NetworkInfo validateWalletAddress(
 NetworkInfo? _validateOptions(ValidationOptions options) {
   // Validate network option
   if (options.network != null) {
-    for (final _ in options.network!) {
-      return const NetworkInfo(
-        network: null,
-        isValid: false,
-        description: 'Invalid options: network array must contain only strings',
-      );
+    for (final network in options.network!) {
+      if (network is! String) {
+        return const NetworkInfo(
+          network: null,
+          isValid: false,
+          description: 'Invalid options: network array must contain only strings',
+        );
+      }
     }
+  }
+
+  // Validate other options
+  if (options.nsDomains.isNotEmpty && options.nsDomains.any((domain) => domain is! String)) {
+    return const NetworkInfo(
+      network: null,
+      isValid: false,
+      description: 'Invalid options: nsDomains must contain only strings',
+    );
   }
 
   return null;
@@ -606,9 +617,7 @@ bool _enabledNetwork(List<String> networks, List<String>? allowedNetworks) {
   }
 
   // Check if any of the networks are in the allowed list
-  final isEnabled =
-      networks.any((network) => allowedNetworks.contains(network));
-  return isEnabled;
+  return networks.any((network) => allowedNetworks.contains(network));
 }
 
 String _formatICANAddress(String address) {
