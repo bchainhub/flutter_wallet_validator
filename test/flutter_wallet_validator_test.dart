@@ -297,22 +297,6 @@ void main() {
       );
     });
 
-    group('Option Validation', () {
-      test('handles invalid option types', () {
-        final address = '0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed';
-        final invalidOptions = [
-          const ValidationOptions(testnet: false, nsDomains: []),
-          const ValidationOptions(network: ['sol']),
-        ];
-
-        for (final options in invalidOptions) {
-          final result = validateWalletAddress(address, options: options);
-          expect(result.isValid, isFalse);
-          expect(result.description, contains('Invalid options'));
-        }
-      });
-    });
-
     group('Cross-Network Validation', () {
       test('handles addresses that could be valid in multiple networks', () {
         final address = '1234567890123456789012345678901234567890';

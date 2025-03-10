@@ -13,10 +13,6 @@ NetworkInfo validateWalletAddress(
   ValidationOptions options = const ValidationOptions(),
   bool forceChecksumValidation = false,
 }) {
-  // Validate options first
-  final optionsError = _validateOptions(options);
-  if (optionsError != null) return optionsError;
-
   // Handle empty or invalid input
   if (address == null || address.isEmpty) {
     return const NetworkInfo(
@@ -530,32 +526,6 @@ NetworkInfo validateWalletAddress(
     isValid: false,
     description: 'Unknown address format',
   );
-}
-
-NetworkInfo? _validateOptions(ValidationOptions options) {
-  // Validate network option
-  if (options.network != null) {
-    for (final network in options.network!) {
-      if (network is! String) {
-        return const NetworkInfo(
-          network: null,
-          isValid: false,
-          description: 'Invalid options: network array must contain only strings',
-        );
-      }
-    }
-  }
-
-  // Validate other options
-  if (options.nsDomains.isNotEmpty && options.nsDomains.any((domain) => domain is! String)) {
-    return const NetworkInfo(
-      network: null,
-      isValid: false,
-      description: 'Invalid options: nsDomains must contain only strings',
-    );
-  }
-
-  return null;
 }
 
 bool _validateEVMChecksum(String address, bool forceValidation) {
