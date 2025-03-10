@@ -1,3 +1,8 @@
+## 0.1.1
+
+- Better description
+- Commented code
+
 ## 0.1.0
 
 Initial release of the Flutter Wallet Validator package.

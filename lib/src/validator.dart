@@ -7,7 +7,21 @@ import 'utils/patterns.dart';
 import 'utils/base58_check.dart';
 import 'package:pointycastle/digests/keccak.dart';
 
-/// Validates a blockchain wallet address and returns information about the network it belongs to
+/// A function that validates blockchain wallet addresses and returns network information.
+///
+/// Takes a wallet address string and optional validation settings. Returns [NetworkInfo]
+/// containing validation results and network details.
+///
+/// Parameters:
+/// - [address] - The wallet address to validate
+/// - [options] - Optional [ValidationOptions] to configure validation behavior
+/// - [forceChecksumValidation] - Forces checksum validation for EVM addresses
+///
+/// Returns a [NetworkInfo] object containing:
+/// - network type
+/// - validation status
+/// - description
+/// - optional metadata specific to the network type
 NetworkInfo validateWalletAddress(
   String? address, {
   ValidationOptions options = const ValidationOptions(),
@@ -528,6 +542,11 @@ NetworkInfo validateWalletAddress(
   );
 }
 
+/// Validates the checksum of an EVM (Ethereum Virtual Machine) address.
+///
+/// Parameters:
+/// - [address] - The EVM address to validate
+/// - [forceValidation] - Forces validation even for all lowercase/uppercase addresses
 bool _validateEVMChecksum(String address, bool forceValidation) {
   if (!RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address)) {
     return false;
@@ -559,6 +578,10 @@ bool _validateEVMChecksum(String address, bool forceValidation) {
   return true;
 }
 
+/// Validates the checksum of an ICAN (International Crypto Account Number) address.
+///
+/// Parameters:
+/// - [address] - The ICAN address to validate
 bool _validateICANChecksum(String address) {
   address = address.toUpperCase();
   final rearranged = '${address.substring(4)}${address.substring(0, 4)}';
@@ -581,6 +604,11 @@ bool _validateICANChecksum(String address) {
   return int.parse(remainder) % 97 == 1;
 }
 
+/// Checks if any of the specified networks are enabled in the allowed networks list.
+///
+/// Parameters:
+/// - [networks] - List of networks to check
+/// - [allowedNetworks] - List of networks that are allowed
 bool _enabledNetwork(List<String> networks, List<String>? allowedNetworks) {
   if (allowedNetworks == null || allowedNetworks.isEmpty) {
     return true;
@@ -590,6 +618,10 @@ bool _enabledNetwork(List<String> networks, List<String>? allowedNetworks) {
   return networks.any((network) => allowedNetworks.contains(network));
 }
 
+/// Formats an ICAN address by inserting spaces every 4 characters.
+///
+/// Parameters:
+/// - [address] - The ICAN address to format
 String _formatICANAddress(String address) {
   final upperAddress = address.toUpperCase();
   final chunks = <String>[];
@@ -605,6 +637,12 @@ String _formatICANAddress(String address) {
   return chunks.join('\u00A0');
 }
 
+/// Validates if an address follows the Base58Check encoding rules.
+///
+/// Parameters:
+/// - [address] - The address to validate
+///
+/// Throws an exception if the address is invalid.
 void _validateBase58Check(String address) {
   if (!Base58Check.validate(address)) {
     throw Exception('Invalid Base58Check address');

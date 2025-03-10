@@ -1,7 +1,11 @@
 import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 
+/// Utility class for Base58Check encoding and decoding.
+///
+/// Implements the Base58Check algorithm commonly used in cryptocurrency addresses.
 class Base58Check {
+  /// The Base58 alphabet used for encoding and decoding.
   static const _alphabet =
       '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
   static final _alphabetBytes = _alphabet.codeUnits;
@@ -15,6 +19,9 @@ class Base58Check {
     }
   }
 
+  /// Decodes a Base58Check string into bytes.
+  ///
+  /// Throws [FormatException] if the input is invalid Base58.
   static Uint8List decode(String input) {
     _initIndexes();
 
@@ -71,6 +78,9 @@ class Base58Check {
     return decoded;
   }
 
+  /// Encodes bytes into a Base58Check string.
+  ///
+  /// Returns an empty string if the input data is empty.
   static String encode(Uint8List data) {
     if (data.isEmpty) {
       return '';
@@ -119,6 +129,9 @@ class Base58Check {
     return buffer.toString();
   }
 
+  /// Validates if a string is a valid Base58Check address.
+  ///
+  /// Returns true if the address is valid, false otherwise.
   static bool validate(String address) {
     try {
       final decoded = decode(address);

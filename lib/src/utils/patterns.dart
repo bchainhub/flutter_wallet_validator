@@ -1,11 +1,22 @@
+/// Regular expression patterns for validating various cryptocurrency addresses.
 class Patterns {
+  /// Pattern for Ethereum and other EVM-compatible addresses
   static final RegExp evm = RegExp(r'^0x[a-f0-9]{40}$', caseSensitive: false);
+
+  /// Pattern for Cosmos ecosystem addresses (Cosmos, Osmosis, Axelar, etc.)
   static final RegExp atom = RegExp(
     r'^(cosmos|osmo|axelar|juno|stars)1[a-zA-Z0-9]{38}$',
   );
+
+  /// Pattern for Solana addresses
   static final RegExp sol = RegExp(r'^[1-9A-HJ-NP-Za-km-z]{32,44}$');
+
+  /// Pattern for Cardano mainnet addresses
   static final adaMainnet = RegExp(r'^addr1[a-z0-9]{98}$');
+
+  /// Pattern for Cardano testnet addresses
   static final adaTestnet = RegExp(r'^addr_test1[a-z0-9]{98}$');
+
   static final adaStake = RegExp(r'^stake1[a-z0-9]{53}$');
   static final adaStakeTestnet = RegExp(r'^stake_test1[a-z0-9]{53}$');
   static final RegExp algo = RegExp(r'^[A-Z2-7]{58}$');
