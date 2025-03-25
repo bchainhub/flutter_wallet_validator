@@ -1,3 +1,10 @@
+# Changelog
+
+## 0.1.3
+
+- Updated pubspec.yaml
+- Upgraded dependencies
+
 ## 0.1.2
 
 - Changed the package description
