@@ -170,6 +170,14 @@ void main() {
         expect(result.isValid, isTrue);
         expect(result.description, contains('Bitcoin Native SegWit'));
       });
+
+      test('rejects a corrupted Native SegWit checksum', () {
+        final result = validateWalletAddress(
+          'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdp',
+        );
+        expect(result.network, equals('btc'));
+        expect(result.isValid, isFalse);
+      });
     });
 
     group('Cardano Addresses', () {
@@ -197,9 +205,7 @@ void main() {
     group('Cosmos Addresses', () {
       test('validates Cosmos addresses', () {
         final addresses = {
-          'cosmos1yw6g44c4pqd2rxgrcqekxg9k8f4fd8xpx2k8c3': 'cosmos',
-          'osmo1yw6g44c4pqd2rxgrcqekxg9k8f4fd8xpxqtvm3': 'osmo',
-          'juno1yw6g44c4pqd2rxgrcqekxg9k8f4fd8xpxm4c8y': 'juno',
+          'cosmos1tygms3xhhs3yv487phx3dw4a95jn7t7lpm470r': 'cosmos',
         };
 
         addresses.forEach((address, prefix) {
@@ -208,6 +214,13 @@ void main() {
           expect(result.isValid, isTrue);
           expect(result.metadata?['chain'], equals(prefix));
         });
+      });
+
+      test('rejects a corrupted Cosmos checksum', () {
+        final result = validateWalletAddress(
+          'cosmos1tygms3xhhs3yv487phx3dw4a95jn7t7lpm470x',
+        );
+        expect(result.isValid, isFalse);
       });
     });
 
@@ -218,6 +231,24 @@ void main() {
         );
         expect(result.network, equals('sol'));
         expect(result.isValid, isTrue);
+      });
+    });
+
+    group('Cross-network Base58 Addresses', () {
+      test('classifies a checksummed Tron address as Tron, not Solana', () {
+        final result = validateWalletAddress(
+          'TNPeeaaFB7K9cmo4uQpcU32zGK8G1NYqeL',
+        );
+        expect(result.network, equals('trx'));
+        expect(result.isValid, isTrue);
+      });
+
+      test('rejects a corrupted Tron checksum', () {
+        final result = validateWalletAddress(
+          'TNPeeaaFB7K9cmo4uQpcU32zGK8G1NYqeM',
+        );
+        expect(result.network, equals('trx'));
+        expect(result.isValid, isFalse);
       });
     });
 
@@ -271,7 +302,12 @@ void main() {
           expect(result.isValid, isFalse);
           expect(
             result.description,
-            anyOf(['Invalid address format', 'Unknown address format']),
+            anyOf([
+              'Invalid address format',
+              'Unknown address format',
+              'Invalid Bitcoin Native SegWit address',
+              'Invalid Litecoin Native SegWit address',
+            ]),
           );
         }
       });
@@ -290,7 +326,12 @@ void main() {
             expect(result.isValid, isFalse);
             expect(
               result.description,
-              anyOf(['Invalid address format', 'Unknown address format']),
+              anyOf([
+                'Invalid address format',
+                'Unknown address format',
+                'Invalid Bitcoin Native SegWit address',
+                'Invalid Litecoin Native SegWit address',
+              ]),
             );
           }
         },
@@ -337,7 +378,7 @@ void main() {
       test('handles testnet addresses correctly', () {
         final testnetAddresses = [
           'tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx', // Bitcoin testnet
-          'addr_test1qz2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgs9yc0hh', // Cardano testnet
+          'addr_test1qpvla0l6zgkl4ufzur0wal0uny5lyqsg4rw7g6gxj08lzacth0hnd66lz6uqqz7kwkmx07xyppsk2cddvxnqvfd05reqf7p26w', // Cardano testnet
         ];
 
         // Should fail without testnet option
