@@ -583,8 +583,10 @@ bool _validateEVMChecksum(String address, bool forceValidation) {
   }
 
   // Skip validation for all-lowercase/uppercase unless forced
+  final addressBody = address.substring(2);
   if (!forceValidation &&
-      (address == address.toLowerCase() || address == address.toUpperCase())) {
+      (addressBody == addressBody.toLowerCase() ||
+          addressBody == addressBody.toUpperCase())) {
     return true;
   }
 

@@ -23,6 +23,15 @@ void main() {
         expect(result.metadata?['isChecksumValid'], isTrue);
       });
 
+      test('validates uppercase EVM address unless checksum is forced', () {
+        const address = '0x5AAEB6053F3E94C9B9A09F33669435E7EF1BEAED';
+        expect(validateWalletAddress(address).isValid, isTrue);
+        expect(
+          validateWalletAddress(address, forceChecksumValidation: true).isValid,
+          isFalse,
+        );
+      });
+
       test('invalidates incorrect checksum EVM address', () {
         final result = validateWalletAddress(
           '0x5AAeb6053F3E94C9b9A09f33669435E7Ef1BeAeD',
