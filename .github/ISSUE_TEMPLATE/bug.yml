@@ -1,12 +1,15 @@
 name: Report Bug 🪲
 description: Create a bug report for Flutter Wallet Validator
+title: "[Bug]: "
 labels:
   - bug
+assignees: []
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for taking the time to report a bug. Please provide as many details as possible to help us resolve the issue quickly.
+        Thank you for taking the time to report a bug. Never include private
+        keys, recovery phrases, or other wallet secrets in this report.
 
   - type: markdown
     attributes:
@@ -75,7 +78,7 @@ body:
     attributes:
       label: Package Version
       description: Version of flutter_wallet_validator package you're using
-      placeholder: e.g., 0.1.0
+      placeholder: e.g., 0.1.4
     validations:
       required: true
 

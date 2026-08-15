@@ -1,7 +1,9 @@
 name: Feature Request 🔮
 description: Suggest an idea for Flutter Wallet Validator
+title: "[Feature]: "
 labels:
   - enhancement
+assignees: []
 body:
   - type: markdown
     attributes:
