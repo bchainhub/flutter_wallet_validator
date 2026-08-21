@@ -1,48 +1,43 @@
 name: Publish to pub.dev
 
 on:
-  release:
-    types: [created]
-
-permissions:
-  id-token: write
-  contents: write
+  push:
+    tags:
+      - '*.*.*'
 
 jobs:
-  publish:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
-      - name: Checkout
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.9'
-          channel: 'stable'
+          channel: stable
           cache: true
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: flutter pub get
 
-      - name: Verify Formatting
+      - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
 
-      - name: Analyze Project
+      - name: Analyze package
         run: flutter analyze
 
-      - name: Run Tests
+      - name: Run tests
         run: flutter test
 
-      - name: Setup Pub Credentials
-        run: |
-          mkdir -p $HOME/.config/dart
-          echo '${{ secrets.PUB_CREDENTIALS_JSON }}' | jq '.' > $HOME/.config/dart/pub-credentials.json
-
-      - name: Check Publish Warnings
+      - name: Validate publishable package
         run: flutter pub publish --dry-run
 
-      - name: Publish Package
-        run: flutter pub publish -f
+  publish-pub-dev:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    needs: validate
+    permissions:
+      id-token: write
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
